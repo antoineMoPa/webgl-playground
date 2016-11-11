@@ -1,6 +1,7 @@
 varying vec2 UV;
 varying vec3 nor;
 varying vec3 vpos;
+varying vec3 wpos;
 
 #define PI 3.1416
 
@@ -40,7 +41,7 @@ void main(void){
     
     float window = 0.0;
     
-    col.rgb = vec3(0.1, 0.2, 0.2);
+    col.rgb = vec3(0.04);
     
     if(abs(nor.y) < 0.2){
         // Not roof or floor
@@ -50,26 +51,17 @@ void main(void){
             }
         }
 
-        col.r += 0.5 * window;
-        col.g += 0.3 * window;
-
-        if(window > 0.5){
-            // Some jitter
-            col.r *= 1.0 + 0.2 * sin(0.1 * vpos.x * vpos.z);
-            col.g *= 1.0 + 0.3 * sin(0.2 * vpos.x * vpos.y);
-            col.b *= 1.0 + 0.3 * sin(0.004 * vpos.x * vpos.z);
-        } else {
-            // Some jitter
-            col.r *= 1.0 + 0.2 * sin(0.01 * vpos.x * vpos.z);
-            col.g *= 1.0 + 0.3 * sin(0.02 * vpos.x * vpos.y);
-            col.b *= 1.0 + 0.3 * sin(0.04 * vpos.x * vpos.z);
-        }
+        // Window less intense when further
+        window *= 1.0 - pow(wpos.z/500.0,2.0);
         
-    } else {
-        // Either roof or floor
-        col = roof(UV.x, UV.y);
-    }
-    
+        col.r += 0.3 * window;
+        col.g += 0.3 * window;
+        col.b += 0.3 * window;
+
+        col.r *= 1.0 + 0.1 * sin(0.1 * vpos.x * vpos.z);
+        col.g *= 1.0 + 0.1 * sin(0.2 * vpos.x * vpos.y);
+        col.b *= 1.0 + 0.1 * sin(0.004 * vpos.x * vpos.z);
+    }    
     col.a = 1.0;
     
     gl_FragColor = col;

@@ -1,6 +1,7 @@
 varying vec2 UV;
 varying vec3 nor;
-varying vec3 vpos;
+varying vec3 vpos; // vertex pos modelspace
+varying vec3 wpos; // vertex pos world
 
 void main(){
     UV = uv;
@@ -13,4 +14,6 @@ void main(){
         projectionMatrix *
         modelViewMatrix *
         vec4(vpos, 1.0);
+    
+    wpos = gl_Position.xyz;
 }

@@ -16,15 +16,9 @@ function three_canvas(params) {
         1, 10000
     );
 
-    var controls = new THREE.FlyControls(camera);
-    
-    controls.movementSpeed = 100;
-    controls.domElement = canvas;
-    controls.rollSpeed = 0.3;
-    controls.autoForward = false;
-    controls.dragToLook = false;
-    
     camera.position.y = 40;
+    camera.position.x = -400;
+    camera.rotation.y = -2;
     
     // World sphere
     var sgeometry = new THREE.SphereGeometry(1000, 32, 32);
@@ -87,7 +81,7 @@ function three_canvas(params) {
             var height = Math.random() * 20 + 10;
 
             // City center
-            height += 400 * Math.pow(1.0 - radius/city_r, 3) * Math.random();
+            height += 100 * Math.pow(1.0 - radius/city_r, 10) * Math.random();
             
             //height += 40 * Math.cos(i/20 + 1);
             //height += 40 * Math.cos(j/20 + 1);
@@ -113,14 +107,12 @@ function three_canvas(params) {
     
     function update(time){
         var delta = clock.getDelta();
-        controls.update(delta);
         time = time % 10;
         uniforms.time.value = time;
-        //camera.rotation.y = time * Math.PI;
-        //camera.rotation.y = -1.0;
-        //camera.position.y = 10.0 * time + 20;
-        //camera.position.x = 10.0 * time - 20;
-        //camera.position.z = - 20;
+        // Some camera move
+        camera.position.x += 0.3 * Math.cos(0.4 * time);
+        camera.position.y += 0.2 * Math.cos(0.4 * time);
+        camera.position.z += 0.2 * Math.cos(0.4 * time);
     }
 
     animate();

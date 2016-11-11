@@ -1,43 +1,18 @@
 varying vec2 UV;
 varying vec3 nor;
 varying vec3 vpos;
+varying vec3 wpos;
 
 #define PI 3.1416
 
 uniform float time;
-
-vec4 roof(float x, float y){
-    vec4 col;
-    float x_m = mod(x, 1.0);
-    float y_m = mod(y, 1.0);
-
-    if( x_m < 0.1 || x_m > 0.9 ||
-        y_m < 0.1 || y_m > 0.9 ){
-        col.rgb = 0.8 * vec3(0.1, 0.2, 0.2);
-    } else {
-        col.rgb = vec3(0.1, 0.2, 0.2);
-        col.r += 0.02 + 0.03 * sin(0.001 * x * y);
-        col.g += 0.02 + 0.03 * sin(0.0015 * x * y);
-        col.b += 0.02 + 0.03 * sin(0.0013 * x * y);
-                
-        float fac = 1.0 - cos(2.0 * x_m * PI);
-        
-        fac *= 1.0 - cos(2.0 * y_m * PI);
-        
-        col *= 0.1 * fac + 0.9;
-    }
-
-    col.a = 1.0;
-            
-    return col;
-}
 
 vec4 road(float x, float y){
     vec4 col = vec4(0.0);;
 
     // Double yellow at middle
     if(x > 0.48 && x < 0.49 || x > 0.51 && x < 0.52){
-        col = vec4(0.6, 0.5, 0.0, 1.0);
+        col = vec4(0.0, 0.3, 0.8, 1.0);
     }
 
     // White at quarter
@@ -74,15 +49,15 @@ void main(void){
     }
 
     if(x_road || y_road){
-        float fac_x = pow(cos(x * PI),3.0);
-        float fac_y = pow(cos(y * PI),3.0);
-        vec2 rg = vec2(0.3, 0.2) * abs(fac_x) * abs(fac_y);
+        float fac_x = pow(cos(x * PI),4.0);
+        float fac_y = pow(cos(y * PI),4.0);
+        float light = 0.3 *  abs(fac_x) * abs(fac_y);
 
         // Only take 1/2 occurences
         if(x_road && fac_y > 0.0){
-            col.rg += rg;
+            col.b += light;
         } else if(y_road && fac_x > 0.0){
-            col.rg += rg;
+            col.b+= light;
         }
     }
 
@@ -100,8 +75,10 @@ void main(void){
     }
 
     if(!x_road && !y_road){
-        col = roof(x, y);
+        col = vec4(0.0);
     }
+
+    col *= 1.0 - wpos.z / 800.0;
     
     col.a = 1.0;
     
