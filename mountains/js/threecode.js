@@ -16,9 +16,9 @@ function three_canvas(params) {
         1, 10000
     );
 
-    camera.position.y = 40;
-    camera.position.x = -400;
-    camera.rotation.y = -2;
+    camera.position.y = 4;
+    camera.position.x = 0;
+    camera.rotation.y = 3;
     
     // World sphere
     var sgeometry = new THREE.SphereGeometry(1000, 32, 32);
@@ -32,12 +32,15 @@ function three_canvas(params) {
     var gmaterial = new THREE.ShaderMaterial({
         vertexShader: params.shaders["mountains"].vertex,
         fragmentShader: params.shaders["mountains"].fragment,
-        side: THREE.BackSide
+        side: THREE.DoubleSide
     });
 
-    var ggeometry = new THREE.BoxGeometry( 10000, 0.3, 10000 );
-    var gcube = new THREE.Mesh(ggeometry, gmaterial);
-    scene.add(gcube);
+    var ggeometry = new THREE.PlaneGeometry( 200, 200, 100, 100 );
+    var ground = new THREE.Mesh(ggeometry, gmaterial);
+
+    ground.rotation.x = Math.PI/2.0;
+    
+    scene.add(ground);
     
     var sphere = new THREE.Mesh(sgeometry, smaterial);
     sphere.position.x = 0.0;
