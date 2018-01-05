@@ -14,9 +14,11 @@ void main(void){
 
 	vec4 col;
 	
-	col.rgb = vec3(0.0, x * 0.2, y * 0.1);
+	col.rgb = vec3(0.1, 0.1, 0.1);
+	
+	col -= 0.02 * cos(vpos.x * 0.4) + 0.02 * cos(vpos.y * 0.4);
 
-	col.r += 0.1 * cos(vpos.x * 0.4) + 0.1 * cos(vpos.y * 0.4);
+	col *= 1.0 + 0.03 * cos(vpos.x * 10.0) + 0.04 * cos(vpos.x * 12.0);
 	
 	col.a = 1.0;
 	
